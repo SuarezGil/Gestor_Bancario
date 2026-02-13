@@ -1,15 +1,16 @@
-import Account from '../account/account.model.js';
+import Account from '../src/accounts/account.model.js';
 
 export const validateTransaction = async (req, res, next) => {
     try {
         const { tipoTransaccion, monto, moneda, cuentaOrigen, cuentaDestino } = req.body;
 
-        if (!tipoTransaccion || !monto || !moneda || !cuentaDestino) {
-            return res.status(400).json({ success: false, message: 'tipoTransaccion, monto, moneda y cuentaDestino son obligatorios' });
+        if (!tipoTransaccion || !monto || !moneda) {
+            return res.status(400).json({ success: false, message: 'tipoTransaccion, monto y moneda son obligatorios' });
         }
 
-        const validTypes = ['DEPOSITO', 'TRANSFERENCIA'];
-        if (!validTypes.includes(tipoTransaccion.toUpperCase())) {
+        const normalizedType = String(tipoTransaccion).toUpperCase();
+        const validTypes = ['DEPOSITO', 'TRANSFERENCIA', 'RETIRO'];
+        if (!validTypes.includes(normalizedType)) {
             return res.status(400).json({ success: false, message: 'tipoTransaccion inválido' });
         }
 
@@ -18,12 +19,13 @@ export const validateTransaction = async (req, res, next) => {
         }
 
         const validCurrencies = ['GTQ', 'USD'];
-        if (!validCurrencies.includes(moneda.toUpperCase())) {
+        if (!validCurrencies.includes(String(moneda).toUpperCase())) {
             return res.status(400).json({ success: false, message: 'moneda inválida' });
         }
 
-        if (tipoTransaccion === 'TRANSFERENCIA') {
+        if (normalizedType === 'TRANSFERENCIA') {
             if (!cuentaOrigen) return res.status(400).json({ success: false, message: 'cuentaOrigen es obligatoria para transferencias' });
+            if (!cuentaDestino) return res.status(400).json({ success: false, message: 'cuentaDestino es obligatoria para transferencias' });
 
             const origin = await Account.findById(cuentaOrigen);
             const destination = await Account.findById(cuentaDestino);
@@ -31,9 +33,17 @@ export const validateTransaction = async (req, res, next) => {
             if (!origin || !destination) return res.status(404).json({ success: false, message: 'Cuenta origen o destino no encontrada' });
             if (origin.saldo < monto) return res.status(400).json({ success: false, message: 'Saldo insuficiente en la cuenta origen' });
 
-        } else if (tipoTransaccion === 'DEPOSITO') {
+        } else if (normalizedType === 'DEPOSITO') {
+            if (!cuentaDestino) return res.status(400).json({ success: false, message: 'cuentaDestino es obligatoria para depósitos' });
             const destination = await Account.findById(cuentaDestino);
             if (!destination) return res.status(404).json({ success: false, message: 'Cuenta destinataria no encontrada' });
+        } else if (normalizedType === 'RETIRO') {
+            if (!cuentaOrigen) return res.status(400).json({ success: false, message: 'cuentaOrigen es obligatoria para retiros' });
+
+            const origin = await Account.findById(cuentaOrigen);
+
+            if (!origin) return res.status(404).json({ success: false, message: 'Cuenta origen no encontrada' });
+            if (origin.saldo < monto) return res.status(400).json({ success: false, message: 'Saldo insuficiente en la cuenta origen' });
         }
 
         next();
