@@ -13,13 +13,13 @@ const router = Router();
 
 
 router.post(
-    '/create',
+    '/account/create',
     
     createAccount
 );
 
 router.get(
-    '/get',
+    '/account/get',
     getAccounts
 );
 

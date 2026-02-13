@@ -19,7 +19,7 @@ app.get("/health", (_req, res) => {
     res.status(200).json({ ok: true, status: "up" });
 });
 
-app.use("/api/accounts", accountRoutes);
+app.use("/gestionBancaria/api/v1", accountRoutes);
 
 app.use((req, res) => {
     res.status(404).json({
