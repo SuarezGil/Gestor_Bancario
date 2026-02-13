@@ -12,10 +12,13 @@ export const createUser = async (req, res) => {
         const user = new User(userData);
         await user.save();
 
+        const userResponse = user.toObject();
+        delete userResponse._id;
+
         res.status(201).json({
             success: true,
             message: 'Usuario creado exitosamente',
-            data: user
+            data: userResponse
         });
     } catch (error) {
         res.status(400).json({
@@ -37,6 +40,7 @@ export const getUsers = async (req, res) => {
         const filter = { isActive };
 
         const users = await User.find(filter)
+            .select('-_id')
             .limit(limit)
             .skip((page - 1) * limit)
             .sort({ fecha_registro: -1 });
