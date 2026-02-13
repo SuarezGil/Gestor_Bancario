@@ -1,0 +1,3 @@
+POST http://localhost:3006/gestionBancaria/api/v1/account/create
+
+GET http://localhost:3006/gestionBancaria/api/v1/account/get
