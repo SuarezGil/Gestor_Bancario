@@ -10,7 +10,6 @@ const accountSchema = mongoose.Schema(
         },
         numeroCuenta: {
             type: String,
-            unique: true,
             trim: true,
             maxlength: [10, 'El número de cuenta no puede exceder 10 caracteres']
             // Opcional si solo quieres números:

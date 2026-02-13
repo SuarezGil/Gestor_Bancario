@@ -65,4 +65,7 @@ const createCloudinaryUploader = (folder) => {
 export const uploadFieldImage = createCloudinaryUploader(
     process.env.CLOUDINARY_FOLDER || 'gestorBancario/image'
 )
+export const uploadUserImage = createCloudinaryUploader(
+    process.env.CLOUDINARY_FOLDER || 'gestorBancario/users'
+)
 export {cloudinary}
