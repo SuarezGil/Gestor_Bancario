@@ -8,7 +8,10 @@ import Account from './account.model.js';
 export const createAccount = async (req, res) => {
     try {
 
-        const accountData = req.body;
+        const accountData = {
+            ...req.body,
+            estado: true
+        };
 
         // Crear instancia del modelo
         const account = new Account(accountData);
@@ -16,10 +19,13 @@ export const createAccount = async (req, res) => {
         // Guardar en la BD
         await account.save();
 
+        const accountResponse = account.toObject();
+        delete accountResponse._id;
+
         res.status(201).json({
             success: true,
             message: 'Cuenta creada exitosamente',
-            data: account
+            data: accountResponse
         });
 
     } catch (error) {
@@ -42,21 +48,28 @@ export const getAccounts = async (req, res) => {
 
         const { page = 1, limit = 10, estado = true } = req.query;
 
+        const pageNumber = Math.max(parseInt(page, 10) || 1, 1);
+        const limitNumber = Math.max(parseInt(limit, 10) || 10, 1);
+
+        const estadoValue = typeof estado === 'string'
+            ? estado.toLowerCase() === 'true'
+            : estado;
+
         // Filtro
-        const filter = { estado };
+        const filter = { estado: estadoValue };
 
         // Opciones
         const options = {
-            page: parseInt(page),
-            limit: parseInt(limit),
+            page: pageNumber,
+            limit: limitNumber,
             sort: { fechaCreacion: -1 }
         };
 
         // Buscar cuentas
         const accounts = await Account.find(filter)
-            .populate('usuarioId', 'name email') // Trae datos del usuario
+            .select('-_id')
             .limit(options.limit)
-            .skip((page - 1) * limit)
+            .skip((pageNumber - 1) * limitNumber)
             .sort(options.sort);
 
         // Total
@@ -66,10 +79,10 @@ export const getAccounts = async (req, res) => {
             success: true,
             data: accounts,
             pagination: {
-                currentPage: Number(page),
-                totalPages: Math.ceil(total / limit),
+                currentPage: pageNumber,
+                totalPages: Math.ceil(total / limitNumber),
                 totalRecords: total,
-                limit: Number(limit)
+                limit: limitNumber
             }
         });
 
