@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "966bb543-ad87-4e0e-b5f4-dda005be23c4",
+		"name": "My Collection",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "52283264",
+		"_collection_link": "https://isuarez-2021691-7572583.postman.co/workspace/Iosef's-Workspace~bb715df8-0696-4af8-898c-0e785264ed73/collection/52283264-966bb543-ad87-4e0e-b5f4-dda005be23c4?action=share&source=collection_link&creator=52283264"
+	},
+	"item": [
+		{
+			"name": "llamar todas las transacciones",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/get",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"gestionBancaria",
+						"api",
+						"v1",
+						"transactions",
+						"get"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Crear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"tipoTransaccion\": \"RETIRO\",\n\"monto\": 1200,\n\"moneda\": \"GTQ\",\n\"descripcion\": \"oda\",\n\"cuentaOrigen\": \"698ec807ac5f181fe1b8b46d\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"gestionBancaria",
+						"api",
+						"v1",
+						"transactions",
+						"create"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "actualizar",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descripcion\": \"Actualización de prueba\",\r\n    \"estado\": \"CANCELADA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/update/698ed80d256bb82d1f6bcfd3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"gestionBancaria",
+						"api",
+						"v1",
+						"transactions",
+						"update",
+						"698ed80d256bb82d1f6bcfd3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/get/ID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"gestionBancaria",
+						"api",
+						"v1",
+						"transactions",
+						"get",
+						"ID"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
