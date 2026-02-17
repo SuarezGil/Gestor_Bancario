@@ -1,6 +1,24 @@
+Endpoints para crear una cuenta
+
 POST http://localhost:3006/gestionBancaria/api/v1/account/create
 
+{
+  "usuarioId": "65abc12345fgh67890ijklmn",
+  "tipoCuenta": "AHORRO",
+  "saldo": 1500.50,
+  "moneda": "GTQ"
+}
+
+Listar cuentas:
 GET http://localhost:3006/gestionBancaria/api/v1/account/get
+
+Actualizar Cuentas:
+http://localhost:3006/gestionBancaria/api/v1/account/update/id del mongo
+
+Descativar cuenta:
+http://localhost:3006/gestionBancaria/api/v1/account/delete/id del mongo
+
+---------------------------------------------------------------------------------------
 
 
 POST http://localhost:3006/gestionBancaria/api/v1/transactions/create

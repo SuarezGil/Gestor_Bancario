@@ -97,4 +97,84 @@ export const getAccounts = async (req, res) => {
     }
 };
 
+/**
+ * ACTUALIZAR CUENTA
+ */
+export const updateAccount = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+        const updateData = req.body;
+
+        // No permitir modificar numeroCuenta manualmente
+        delete updateData.numeroCuenta;
+
+        const updatedAccount = await Account.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true }
+        ).select('-_id');
+
+        if (!updatedAccount) {
+            return res.status(404).json({
+                success: false,
+                message: 'Cuenta no encontrada'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Cuenta actualizada correctamente',
+            data: updatedAccount
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: 'Error al actualizar la cuenta',
+            error: error.message
+        });
+
+    }
+};
+
+/**
+ * ELIMINAR CUENTA (Soft Delete)
+ */
+export const deleteAccount = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const account = await Account.findById(id);
+
+        if (!account) {
+            return res.status(404).json({
+                success: false,
+                message: 'Cuenta no encontrada'
+            });
+        }
+
+        account.estado = false;
+        await account.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Cuenta desactivada correctamente'
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: 'Error al eliminar la cuenta',
+            error: error.message
+        });
+
+    }
+};
+
+
+
 

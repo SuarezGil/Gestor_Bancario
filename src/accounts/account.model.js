@@ -6,7 +6,7 @@ const accountSchema = mongoose.Schema(
     {
         usuarioId: {
             type: String,
-            required: [true, 'El usuario es requerido']
+            required: [true, 'El id del usuario es requerido']
         },
         numeroCuenta: {
             type: String,
@@ -40,17 +40,10 @@ const accountSchema = mongoose.Schema(
         estado: {
             type: Boolean,
             default: true
-        },
-        fechaCreacion: {
-            type: Date,
-            default: Date.now
-        },
-        fechaModificacion: {
-            type: Date,
-            default: null
         }
     },
     {
+        timestamps: true,
         versionKey: false
     }
 );
