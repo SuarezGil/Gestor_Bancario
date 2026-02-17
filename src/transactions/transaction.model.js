@@ -37,10 +37,6 @@ const transactionSchema = mongoose.Schema(
                 message: "Moneda no válida"
             }
         },
-        fechaTransaccion: {
-            type: Date,
-            default: Date.now
-        },
         descripcion: {
             type: String,
             default: null,
@@ -56,6 +52,7 @@ const transactionSchema = mongoose.Schema(
         }
     },
     {
+        timestamp: true,
         versionKey: false
     }
 );
