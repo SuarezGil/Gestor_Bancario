@@ -37,13 +37,9 @@ const transactionSchema = mongoose.Schema(
                 message: "Moneda no válida"
             }
         },
-        fechaTransaccion: {
-            type: Date,
-            default: Date.now
-        },
         descripcion: {
             type: String,
-            default: null,
+            required: [true, "La descripción es requerida"],
             trim: true,
             maxlength: [100, "La descripción no puede exceder 100 caracteres"]
         },
@@ -56,6 +52,7 @@ const transactionSchema = mongoose.Schema(
         }
     },
     {
+        timestamps: true,
         versionKey: false
     }
 );
