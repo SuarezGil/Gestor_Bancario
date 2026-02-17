@@ -4,9 +4,9 @@ import mongoose from "mongoose";
 
 const accountSchema = mongoose.Schema(
     {
-        usuarioId: {
+        tokenUser: {
             type: String,
-            required: [true, 'El usuario es requerido']
+            required: [true, 'El token de usuario es requerido']
         },
         numeroCuenta: {
             type: String,
@@ -57,9 +57,9 @@ const accountSchema = mongoose.Schema(
 
 // Índices
 accountSchema.index({ numeroCuenta: 1 }, { unique: true });
-accountSchema.index({ usuarioId: 1 });
+accountSchema.index({ tokenUser: 1 });
 accountSchema.index({ estado: 1 });
-accountSchema.index({ usuarioId: 1, estado: 1 });
+accountSchema.index({ tokenUser: 1, estado: 1 });
 
 const generateAccountNumber = () => {
     const min = 1_000_000_000; // 10 dígitos
