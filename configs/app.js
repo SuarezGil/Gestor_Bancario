@@ -7,7 +7,7 @@ import morgan from "morgan";
 
 import accountRoutes from "../src/accounts/account.routes.js";
 import transactionRoutes from "../src/transactions/transaction.routes.js";
-
+"";
 const app = express();
 
 app.use(helmet());
