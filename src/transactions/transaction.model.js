@@ -39,7 +39,7 @@ const transactionSchema = mongoose.Schema(
         },
         descripcion: {
             type: String,
-            default: null,
+            required: [true, "La descripción es requerida"],
             trim: true,
             maxlength: [100, "La descripción no puede exceder 100 caracteres"]
         },

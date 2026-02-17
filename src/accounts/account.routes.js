@@ -1,20 +1,19 @@
 'use strict';
 
 import { Router } from 'express';
+const router = Router();
 
 import {
     createAccount,
     getAccounts
 } from './account.controller.js';
 
-
-
-const router = Router();
+import { validateCreateAccount } from '../../middlewares/validateCreateAccount.js';
 
 
 router.post(
     '/account/create',
-    
+    validateCreateAccount,
     createAccount
 );
 
