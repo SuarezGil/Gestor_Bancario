@@ -31,6 +31,10 @@ export const validateTransaction = async (req, res, next) => {
             const destination = await Account.findById(cuentaDestino);
 
             if (!origin || !destination) return res.status(404).json({ success: false, message: 'Cuenta origen o destino no encontrada' });
+            // Validar que el usuario autenticado sea el dueño de la cuenta de origen
+            if (String(origin.userId) !== String(req.userId)) {
+                return res.status(403).json({ success: false, message: 'No tienes permiso para operar con la cuenta de origen' });
+            }
             if (origin.saldo < monto) return res.status(400).json({ success: false, message: 'Saldo insuficiente en la cuenta origen' });
 
         } else if (normalizedType === 'DEPOSITO') {
@@ -43,6 +47,10 @@ export const validateTransaction = async (req, res, next) => {
             const origin = await Account.findById(cuentaOrigen);
 
             if (!origin) return res.status(404).json({ success: false, message: 'Cuenta origen no encontrada' });
+            // Validar que el usuario autenticado sea el dueño de la cuenta de origen
+            if (String(origin.userId) !== String(req.userId)) {
+                return res.status(403).json({ success: false, message: 'No tienes permiso para operar con la cuenta de origen' });
+            }
             if (origin.saldo < monto) return res.status(400).json({ success: false, message: 'Saldo insuficiente en la cuenta origen' });
         }
 
