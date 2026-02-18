@@ -10,6 +10,7 @@ export const createAccount = async (req, res) => {
 
         const accountData = {
             ...req.body,
+            userId: req.userId,
             estado: true
         };
 
@@ -56,7 +57,10 @@ export const getAccounts = async (req, res) => {
             : estado;
 
         // Filtro
-        const filter = { estado: estadoValue };
+        const filter = {
+            estado: estadoValue,
+            usuarioId: req.userId
+        };
 
         // Opciones
         const options = {

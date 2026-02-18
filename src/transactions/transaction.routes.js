@@ -3,11 +3,13 @@ import { createTransaction, updateTransaction, getTransactions, getTransactionsB
 import { validateTransaction } from '../../middlewares/transaction.middleware.js';
 import requireDescriptionForTransaction from '../../middlewares/requireDescriptionForTransaction.js';
 import currencyConversionMiddleware from '../../middlewares/currencyConversion.js';
+import { validateJWT } from '../../middlewares/validate-JWT.js';
 
 const router = Router();
 
 router.post(
     '/create',
+    validateJWT,
     validateTransaction,
     requireDescriptionForTransaction,
     currencyConversionMiddleware,
@@ -16,16 +18,19 @@ router.post(
 
 router.put(
     '/update/:id',
+    validateJWT,
     updateTransaction
 );
 
 router.get(
     '/get',
+    validateJWT,
     getTransactions,
 );
 
 router.get(
     '/get/:id',
+    validateJWT,
     getTransactionsById
 )
 

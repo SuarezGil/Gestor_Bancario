@@ -4,13 +4,6 @@ import { body } from 'express-validator';
 
 
 export const validateCreateAccount = [
-
-    // ========================
-    // tokenUser
-    // ========================
-    body('tokenUser')
-        .notEmpty().withMessage('El token de usuario es requerido'),
-
     // numeroCuenta se genera automáticamente
     // ========================
     // tipoCuenta

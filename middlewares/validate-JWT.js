@@ -29,7 +29,7 @@ export const validateJWT = (req, res, next) => {
         let message = "Token inválido";
         if (error.name === "TokenExpiredError") message = "Token expirado";
 
-        return res.status(401).json({ success: false, message });
+        return res.status(401).json({ success: false, message, error: error.message });
     }
 };
 
