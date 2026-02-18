@@ -238,6 +238,14 @@ export const getTransactionsById = async (req, res) => {
 
 export const updateTransaction = async (req, res) => {
     try {
+        // Validar rol de usuario
+        if (req.userRole !== "ADMIN_ROLE") {
+            return res.status(403).json({
+                success: false,
+                message: "No tienes permisos para actualizar transacciones"
+            });
+        }
+
         const { id } = req.params;
         const { descripcion, estado } = req.body;
 
