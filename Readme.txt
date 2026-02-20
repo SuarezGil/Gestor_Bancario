@@ -4,8 +4,8 @@ PORT=3006
 URI_MONGO=mongodb://localhost:27017/gestorBancarioDb
  
 JWT_SECRET=MyVerySecretKeyForJWTTokenAuthenticationWith256Bits!
-JWT_ISSUER=GestorBancario
-JWT_AUDIENCE=GestorBancario
+JWT_ISSUER=rVmGkAiSlMaR
+JWT_AUDIENCE=rVmGkAiSlMaR
  
 CLOUDINARY_CLOUD_NAME=dxwodvknq
 CLOUDINARY_API_KEY=315137646775675
