@@ -1,0 +1,13 @@
+NODE_ENV=development
+PORT=3006
+ 
+URI_MONGO=mongodb://localhost:27017/gestorBancarioDb
+ 
+JWT_SECRET=MyVerySecretKeyForJWTTokenAuthenticationWith256Bits!
+JWT_ISSUER=GestorBancario
+JWT_AUDIENCE=GestorBancario
+ 
+CLOUDINARY_CLOUD_NAME=dxwodvknq
+CLOUDINARY_API_KEY=315137646775675
+CLOUDINARY_API_SECRET=5_UHfg54EkMdNq8z030tYdrJtVY
+CLOUDINARY_FOLDER=gestorBancario/fields
