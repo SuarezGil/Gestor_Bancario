@@ -22,6 +22,7 @@ export const validateJWT = (req, res, next) => {
         });
 
         req.adminId = decoded.sub;
+        req.userId = decoded.sub;
         req.userRole = decoded.role;
 
         next();

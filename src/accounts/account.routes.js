@@ -10,14 +10,12 @@ import {
 
 import { validateCreateAccount } from '../../middlewares/validateCreateAccount.js';
 import { validateJWT, isAdmin } from '../../middlewares/validate-JWT.js';
-import { validateUserFromBody } from '../../middlewares/validate-UserJWT.js';
 
 
 router.post(
     '/account/create',
     validateJWT,
     isAdmin,
-    validateUserFromBody,
     validateCreateAccount,
     createAccount
 );

@@ -8,9 +8,6 @@ export const validateCreateAccount = [
     // ========================
     // tipoCuenta
     // ========================
-    body('tokenUsuario')
-        .notEmpty().withMessage('El token del usuario es requerido'),
-
     body('tipoCuenta')
         .notEmpty().withMessage('El tipo de cuenta es requerido')
         .isIn(['AHORRO', 'MONETARIA'])

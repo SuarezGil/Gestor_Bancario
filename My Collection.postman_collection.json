@@ -1,155 +1,295 @@
 {
-	"info": {
-		"_postman_id": "966bb543-ad87-4e0e-b5f4-dda005be23c4",
-		"name": "My Collection",
-		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "52283264",
-		"_collection_link": "https://isuarez-2021691-7572583.postman.co/workspace/Iosef's-Workspace~bb715df8-0696-4af8-898c-0e785264ed73/collection/52283264-966bb543-ad87-4e0e-b5f4-dda005be23c4?action=share&source=collection_link&creator=52283264"
-	},
-	"item": [
-		{
-			"name": "llamar todas las transacciones",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/get",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"get"
-					]
-				},
-				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
-			},
-			"response": []
-		},
-		{
-			"name": "Crear",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful POST request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\"tipoTransaccion\": \"RETIRO\",\n\"monto\": 1200,\n\"moneda\": \"GTQ\",\n\"descripcion\": \"oda\",\n\"cuentaOrigen\": \"698ec807ac5f181fe1b8b46d\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/create",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"create"
-					]
-				},
-				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-			},
-			"response": []
-		},
-		{
-			"name": "actualizar",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"descripcion\": \"Actualización de prueba\",\r\n    \"estado\": \"CANCELADA\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/update/698ed80d256bb82d1f6bcfd3",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"update",
-						"698ed80d256bb82d1f6bcfd3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Buscar",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/get/ID",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"get",
-						"ID"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "0d6acdb2-4b4d-4728-a9cc-f6c6369391ee",
+    "name": "Gestor Bancario API",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwtToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{serverUrl}}/health",
+          "host": [
+            "{{serverUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Verifica que el servidor esté disponible."
+      }
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Crear cuenta (ADMIN_ROLE)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoCuenta\": \"AHORRO\",\n  \"saldo\": 1500.00,\n  \"moneda\": \"GTQ\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/account/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "account",
+                "create"
+              ]
+            },
+            "description": "Crea una cuenta. Requiere JWT válido y rol ADMIN_ROLE. El userId se toma del token Bearer."
+          }
+        },
+        {
+          "name": "Listar cuentas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiBaseUrl}}/account/get?page=1&limit=10&estado=true",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "account",
+                "get"
+              ]
+             
+            },
+            "description": "Lista cuentas del usuario autenticado (userId del token)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Crear transacción - DEPOSITO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoTransaccion\": \"DEPOSITO\",\n  \"cuentaDestino\": \"{{accountDestinationId}}\",\n  \"monto\": 500.00,\n  \"moneda\": \"GTQ\",\n  \"descripcion\": \"Depósito en efectivo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear transacción - RETIRO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoTransaccion\": \"RETIRO\",\n  \"cuentaOrigen\": \"{{accountOriginId}}\",\n  \"monto\": 250.00,\n  \"moneda\": \"GTQ\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear transacción - TRANSFERENCIA",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoTransaccion\": \"TRANSFERENCIA\",\n  \"cuentaOrigen\": \"{{accountOriginId}}\",\n  \"cuentaDestino\": \"{{accountDestinationId}}\",\n  \"monto\": 100.00,\n  \"moneda\": \"USD\",\n  \"descripcion\": \"Pago de servicios\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar transacciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/get?page=1&limit=10",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "get"
+              ]
+            
+            }
+          }
+        },
+        {
+          "name": "Buscar transacción por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/get/{{transactionId}}",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "get",
+                "{{transactionId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar transacción (ADMIN_ROLE)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Ajuste por revisión\",\n  \"estado\": \"CANCELADA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/update/{{transactionId}}",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "update",
+                "{{transactionId}}"
+              ]
+            },
+            "description": "Actualiza descripción y/o estado. Requiere ADMIN_ROLE."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "serverUrl",
+      "value": "http://localhost:3006",
+      "type": "string"
+    },
+    {
+      "key": "apiBaseUrl",
+      "value": "http://localhost:3006/gestionBancaria/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwtToken",
+      "value": "PEGA_AQUI_TU_JWT",
+      "type": "string"
+    },
+    {
+      "key": "accountOriginId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "accountDestinationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "transactionId",
+      "value": "",
+      "type": "string"
+    }
+  ]
 }
