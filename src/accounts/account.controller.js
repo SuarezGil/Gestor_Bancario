@@ -18,7 +18,7 @@ export const createAccount = async (req, res) => {
         const accountData = {
             ...req.body,
             estado: true,
-            usuarioId: req.targetUserId
+            userId: req.targetUserId // id del usuario dueño de la cuenta
         };
 
         const account = new Account(accountData);
@@ -63,7 +63,7 @@ export const getAccounts = async (req, res) => {
         // Filtro
         const filter = {
             estado: estadoValue,
-            usuarioId: req.userId
+            userId: req.userId
         };
 
         // Opciones

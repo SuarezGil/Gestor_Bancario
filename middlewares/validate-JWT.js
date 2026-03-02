@@ -21,7 +21,8 @@ export const validateJWT = (req, res, next) => {
             audience: process.env.JWT_AUDIENCE,
         });
 
-        req.adminId = decoded.sub;
+        req.userId = decoded.sub; // id del sujeto autenticado
+        req.adminId = decoded.sub; // alias previo que usaba el código
         req.userRole = decoded.role;
 
         next();
