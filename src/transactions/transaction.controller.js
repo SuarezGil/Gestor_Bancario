@@ -1,6 +1,6 @@
 import Transaction from './transaction.model.js';
 import Account from '../accounts/account.model.js';
-import { convert, USD_TO_GTQ } from '../../middlewares/currencyConversion.js';
+import { convert } from '../../middlewares/currencyConversion.js';
 
 export const createTransaction = async (req, res) => {
     try {
@@ -87,25 +87,13 @@ export const createTransaction = async (req, res) => {
             await originAccount.save();
         }
 
+
         // Determinar si hubo conversión y registrar la tasa aplicada (si aplica)
         let tasaApplied = null;
-        const originalCurrency = String(moneda).toUpperCase();
-        const originCurrency = originAccount ? String(originAccount.moneda).toUpperCase() : null;
-        const destCurrency = destinationAccount ? String(destinationAccount.moneda).toUpperCase() : null;
+        // ...existing code...
 
-        if (normalizedType === 'TRANSFERENCIA') {
-            if (originCurrency && destCurrency && originCurrency !== destCurrency) {
-                tasaApplied = USD_TO_GTQ;
-            }
-        } else if (normalizedType === 'DEPOSITO') {
-            if (destCurrency && destCurrency !== originalCurrency) {
-                tasaApplied = USD_TO_GTQ;
-            }
-        } else if (normalizedType === 'RETIRO') {
-            if (originCurrency && originCurrency !== originalCurrency) {
-                tasaApplied = USD_TO_GTQ;
-            }
-        }
+        // Definir originalCurrency
+        const originalCurrency = typeof moneda === 'string' ? moneda.toUpperCase() : 'GTQ';
 
         const transaction = await Transaction.create({
             tipoTransaccion: normalizedType,

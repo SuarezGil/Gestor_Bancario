@@ -33,7 +33,7 @@ const transactionSchema = mongoose.Schema(
             type: String,
             required: [true, "La moneda es requerida"],
             enum: {
-                values: ["GTQ", "USD"],
+                values: ["GTQ", "USD", "EUR", "MXN", "COP", "JPY"],
                 message: "Moneda no válida"
             }
         },

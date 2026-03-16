@@ -1,288 +1,161 @@
 {
-	"info": {
-		"_postman_id": "21526158-8881-4801-bb99-88a26800ebe5",
-		"name": "My Collection",
-		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "52283264",
-		"_collection_link": "https://isuarez-2021691-7572583.postman.co/workspace/Iosef's-Workspace~bb715df8-0696-4af8-898c-0e785264ed73/collection/52283264-21526158-8881-4801-bb99-88a26800ebe5?action=share&source=collection_link&creator=52283264"
-	},
-	"item": [
-		{
-			"name": "Health",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3006/health",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"health"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Account - Crear",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfbkViZVJZWUhUUkphIiwianRpIjoiODkyMjMyMmQtY2Y4Yi00ODM0LWIzNzAtZTc1NGNkMmY2MDg0IiwiaWF0IjoxNzcyNDI0NDI2LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjQyNjIyNiwiYXVkIjoiclZtR2tBaVNsTWFSIiwiaXNzIjoiclZtR2tBaVNsTWFSIn0.sh6EqIYEv0ni71s8WTJmgjb7ecsBbbK-3hqf22-s2_k",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{adminToken}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"tokenUsuario\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQW0zZmZQbUdOYnlpIiwianRpIjoiZGQxYmJlMzgtOWY1My00OTk5LTgwMGYtZjEwZDg4ZGNhODEzIiwiaWF0IjoxNzcyNDI1MTM5LCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzcyNDI2OTM5LCJhdWQiOiJyVm1Ha0FpU2xNYVIiLCJpc3MiOiJyVm1Ha0FpU2xNYVIifQ.LLB_QTxijEn-FgeRsyDq4J7MWqnubrssA2WY_pZzc_g\",\r\n    \"tipoCuenta\": \"AHORRO\",\r\n    \"saldo\": \"1500\",\r\n    \"moneda\": \"GTQ\"\r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/account/create",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"account",
-						"create"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Account - Listar",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{userToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/account/get?page=1&limit=10&estado=true",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"account",
-						"get"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "1"
-						},
-						{
-							"key": "limit",
-							"value": "10"
-						},
-						{
-							"key": "estado",
-							"value": "true"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Transaction - Crear",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfRTZXNEN5ZDZKNFExIiwianRpIjoiMDg2YmM5MWYtNjU3OC00N2ZiLWEzYmItMjZiMzNkOGRkNWViIiwiaWF0IjoxNzcyNDI1MjU3LCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzcyNDI3MDU3LCJhdWQiOiJyVm1Ha0FpU2xNYVIiLCJpc3MiOiJyVm1Ha0FpU2xNYVIifQ.g926i5PNlQFoCvQIcCRgr84-WlYkc2Cnw6IZQcmeTTs",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{userToken}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"tipoTransaccion\":\"TRANSFERENCIA\",\r\n    \"monto\": 1200,\r\n    \"moneda\":\"GTQ\",\r\n    \"descripcion\": \"Pago de prueba\",\r\n    \"cuentaOrigen\": \"69a50e23a03e79e85ced50d5\",\r\n    \"cuentaDestino\":\"69a50fcfa03e79e85ced50d8\"\r\n    \r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/create",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"create"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Transaction - Actualizar estado/descripcion",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfbkViZVJZWUhUUkphIiwianRpIjoiYWM4ZDU0MjQtMDk3NS00NDE4LThlNjUtZjhiYjUxMGZjYzcyIiwiaWF0IjoxNzcyNDI1NjM4LCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3MjQyNzQzOCwiYXVkIjoiclZtR2tBaVNsTWFSIiwiaXNzIjoiclZtR2tBaVNsTWFSIn0.TpN-X9sav2a7F30m0gp28_AAVP-56qLMkvwzufLlc64",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{adminToken}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"estado\" : \"CANCELADA\",\r\n    \"descripcion\" : \"Se canceló por hueco\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/update/{{transactionId}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"update",
-						"{{transactionId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Transaction - Listar",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{userToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/get?page=1&limit=10",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"get"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "1"
-						},
-						{
-							"key": "limit",
-							"value": "10"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Transaction - Buscar por id",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{userToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/get/{{transactionId}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3006",
-					"path": [
-						"gestionBancaria",
-						"api",
-						"v1",
-						"transactions",
-						"get",
-						"{{transactionId}}"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "name": "Gestor Bancario API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3006"
+    },
+    {
+      "key": "accountIdOrigen",
+      "value": ""
+    },
+    {
+      "key": "accountIdDestino",
+      "value": ""
+    },
+    {
+      "key": "transactionId",
+      "value": ""
+    },
+    {
+      "key": "favoriteId",
+      "value": ""
+    },
+    {
+      "key": "usuarioId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Accounts - Crear",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipoCuenta\": \"AHORRO\",\n  \"saldo\": 2500,\n  \"moneda\": \"USD\"\n}"
+        },
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/account/create"
+      }
+    },
+    {
+      "name": "Accounts - Listar",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/account/get?page=1&limit=10&estado=true"
+      }
+    },
+    {
+      "name": "Transactions - Crear Transferencia",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipoTransaccion\": \"TRANSFERENCIA\",\n  \"monto\": 100,\n  \"moneda\": \"EUR\",\n  \"descripcion\": \"Transferencia de prueba\",\n  \"cuentaOrigen\": \"{{accountIdOrigen}}\",\n  \"cuentaDestino\": \"{{accountIdDestino}}\"\n}"
+        },
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/transactions/create"
+      }
+    },
+    {
+      "name": "Transactions - Actualizar",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"CANCELADA\",\n  \"descripcion\": \"Cancelada en prueba\"\n}"
+        },
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/transactions/update/{{transactionId}}"
+      }
+    },
+    {
+      "name": "Transactions - Listar",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/transactions/get?page=1&limit=10"
+      }
+    },
+    {
+      "name": "Transactions - Buscar por ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/transactions/get/{{transactionId}}"
+      }
+    },
+    {
+      "name": "Favorites - Agregar",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": \"{{usuarioId}}\",\n  \"cuenta\": \"{{accountIdDestino}}\",\n  \"tipo\": \"AHORRO\",\n  \"alias\": \"Cuenta favorita\"\n}"
+        },
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/favorites"
+      }
+    },
+    {
+      "name": "Favorites - Listar",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/favorites?usuario={{usuarioId}}"
+      }
+    },
+    {
+      "name": "Favorites - Eliminar",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/favorites/{{favoriteId}}?usuario={{usuarioId}}"
+      }
+    },
+    {
+      "name": "Favorites - Transferencia Rapida",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": \"{{usuarioId}}\",\n  \"monto\": 50,\n  \"moneda\": \"USD\",\n  \"descripcion\": \"Transferencia rapida de prueba\"\n}"
+        },
+        "url": "{{baseUrl}}/gestionBancaria/api/v1/favorites/{{favoriteId}}/transfer"
+      }
+    }
+  ]
 }

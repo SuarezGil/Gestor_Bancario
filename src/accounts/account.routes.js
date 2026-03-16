@@ -3,6 +3,7 @@
 import { Router } from 'express';
 const router = Router();
 
+
 import {
     createAccount,
     getAccounts
@@ -21,6 +22,7 @@ router.post(
     validateCreateAccount,
     createAccount
 );
+
 
 router.get(
     '/account/get',
