@@ -1,0 +1,295 @@
+{
+  "info": {
+    "_postman_id": "0d6acdb2-4b4d-4728-a9cc-f6c6369391ee",
+    "name": "Gestor Bancario API",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwtToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{serverUrl}}/health",
+          "host": [
+            "{{serverUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Verifica que el servidor esté disponible."
+      }
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Crear cuenta (ADMIN_ROLE)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoCuenta\": \"AHORRO\",\n  \"saldo\": 1500.00,\n  \"moneda\": \"GTQ\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/account/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "account",
+                "create"
+              ]
+            },
+            "description": "Crea una cuenta. Requiere JWT válido y rol ADMIN_ROLE. El userId se toma del token Bearer."
+          }
+        },
+        {
+          "name": "Listar cuentas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiBaseUrl}}/account/get?page=1&limit=10&estado=true",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "account",
+                "get"
+              ]
+             
+            },
+            "description": "Lista cuentas del usuario autenticado (userId del token)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Crear transacción - DEPOSITO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoTransaccion\": \"DEPOSITO\",\n  \"cuentaDestino\": \"{{accountDestinationId}}\",\n  \"monto\": 500.00,\n  \"moneda\": \"GTQ\",\n  \"descripcion\": \"Depósito en efectivo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear transacción - RETIRO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoTransaccion\": \"RETIRO\",\n  \"cuentaOrigen\": \"{{accountOriginId}}\",\n  \"monto\": 250.00,\n  \"moneda\": \"GTQ\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear transacción - TRANSFERENCIA",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoTransaccion\": \"TRANSFERENCIA\",\n  \"cuentaOrigen\": \"{{accountOriginId}}\",\n  \"cuentaDestino\": \"{{accountDestinationId}}\",\n  \"monto\": 100.00,\n  \"moneda\": \"USD\",\n  \"descripcion\": \"Pago de servicios\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/create",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar transacciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/get?page=1&limit=10",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "get"
+              ]
+            
+            }
+          }
+        },
+        {
+          "name": "Buscar transacción por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/get/{{transactionId}}",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "get",
+                "{{transactionId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar transacción (ADMIN_ROLE)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Ajuste por revisión\",\n  \"estado\": \"CANCELADA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/transactions/update/{{transactionId}}",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "transactions",
+                "update",
+                "{{transactionId}}"
+              ]
+            },
+            "description": "Actualiza descripción y/o estado. Requiere ADMIN_ROLE."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "serverUrl",
+      "value": "http://localhost:3006",
+      "type": "string"
+    },
+    {
+      "key": "apiBaseUrl",
+      "value": "http://localhost:3006/gestionBancaria/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwtToken",
+      "value": "PEGA_AQUI_TU_JWT",
+      "type": "string"
+    },
+    {
+      "key": "accountOriginId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "accountDestinationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "transactionId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

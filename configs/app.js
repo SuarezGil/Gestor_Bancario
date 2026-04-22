@@ -26,10 +26,7 @@ app.use("/gestionBancaria/api/v1/users", userRoutes);
 app.use("/gestionBancaria/api/v1/transactions", transactionRoutes);
 
 app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: "Endpoint not found"
-    });
+    res.status(404).json({ success: false, message: "Endpoint not found" });
 });
 
 export default app;

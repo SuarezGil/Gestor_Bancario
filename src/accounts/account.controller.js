@@ -7,16 +7,21 @@ import Account from './account.model.js';
  */
 export const createAccount = async (req, res) => {
     try {
+        // Permitir solo ADMIN_ROLE
+        if (req.userRole !== 'ADMIN_ROLE') {
+            return res.status(403).json({
+                success: false,
+                message: 'Acceso denegado. Se requiere rol ADMIN_ROLE.'
+            });
+        }
 
         const accountData = {
             ...req.body,
-            estado: true
+            estado: true,
+            userId: req.userId
         };
 
-        // Crear instancia del modelo
         const account = new Account(accountData);
-
-        // Guardar en la BD
         await account.save();
 
         const accountResponse = account.toObject();
@@ -56,7 +61,10 @@ export const getAccounts = async (req, res) => {
             : estado;
 
         // Filtro
-        const filter = { estado: estadoValue };
+        const filter = {
+            estado: estadoValue,
+            userId: req.userId
+        };
 
         // Opciones
         const options = {
