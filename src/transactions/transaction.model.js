@@ -26,8 +26,7 @@ const transactionSchema = mongoose.Schema(
             type: Number,
             set: v => v != null ? Number(parseFloat(v).toFixed(2)) : v,
             required: [true, "El monto es requerido"],
-            min: [0.01, "El monto debe ser mayor a 0"],
-            max: [2000, "El monto no debe ser mayor a 2000"]
+            min: [0.01, "El monto debe ser mayor a 0"]
         },
         moneda: {
             type: String,

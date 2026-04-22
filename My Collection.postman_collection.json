@@ -49,13 +49,29 @@
 					}
 				],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"tokenUsuario\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfQW0zZmZQbUdOYnlpIiwianRpIjoiZGQxYmJlMzgtOWY1My00OTk5LTgwMGYtZjEwZDg4ZGNhODEzIiwiaWF0IjoxNzcyNDI1MTM5LCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzcyNDI2OTM5LCJhdWQiOiJyVm1Ha0FpU2xNYVIiLCJpc3MiOiJyVm1Ha0FpU2xNYVIifQ.LLB_QTxijEn-FgeRsyDq4J7MWqnubrssA2WY_pZzc_g\",\r\n    \"tipoCuenta\": \"AHORRO\",\r\n    \"saldo\": \"1500\",\r\n    \"moneda\": \"GTQ\"\r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tokenUsuario",
+							"value": "{{userToken}}",
+							"type": "text"
+						},
+						{
+							"key": "tipoCuenta",
+							"value": "AHORRO",
+							"type": "text"
+						},
+						{
+							"key": "saldo",
+							"value": "1500",
+							"type": "text"
+						},
+						{
+							"key": "moneda",
+							"value": "GTQ",
+							"type": "text"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3006/gestionBancaria/api/v1/account/create",
@@ -140,13 +156,39 @@
 					}
 				],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"tipoTransaccion\":\"TRANSFERENCIA\",\r\n    \"monto\": 1200,\r\n    \"moneda\":\"GTQ\",\r\n    \"descripcion\": \"Pago de prueba\",\r\n    \"cuentaOrigen\": \"69a50e23a03e79e85ced50d5\",\r\n    \"cuentaDestino\":\"69a50fcfa03e79e85ced50d8\"\r\n    \r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tipoTransaccion",
+							"value": "TRANSFERENCIA",
+							"type": "text"
+						},
+						{
+							"key": "monto",
+							"value": "1200",
+							"type": "text"
+						},
+						{
+							"key": "moneda",
+							"value": "GTQ",
+							"type": "text"
+						},
+						{
+							"key": "descripcion",
+							"value": "Pago de prueba",
+							"type": "text"
+						},
+						{
+							"key": "cuentaOrigen",
+							"value": "{{cuentaOrigenId}}",
+							"type": "text"
+						},
+						{
+							"key": "cuentaDestino",
+							"value": "{{cuentaDestinoId}}",
+							"type": "text"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/create",
@@ -188,13 +230,19 @@
 					}
 				],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"estado\" : \"CANCELADA\",\r\n    \"descripcion\" : \"Se canceló por hueco\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "estado",
+							"value": "CANCELADA",
+							"type": "text"
+						},
+						{
+							"key": "descripcion",
+							"value": "Se cancelo por hueco",
+							"type": "text"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3006/gestionBancaria/api/v1/transactions/update/{{transactionId}}",
@@ -283,6 +331,28 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "adminToken",
+			"value": ""
+		},
+		{
+			"key": "userToken",
+			"value": ""
+		},
+		{
+			"key": "cuentaOrigenId",
+			"value": ""
+		},
+		{
+			"key": "cuentaDestinoId",
+			"value": ""
+		},
+		{
+			"key": "transactionId",
+			"value": ""
 		}
 	]
 }
