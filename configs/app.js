@@ -7,6 +7,7 @@ import morgan from "morgan";
 
 import accountRoutes from "../src/accounts/account.routes.js";
 import userRoutes from "../src/users/user.routes.js";
+import transactionRoutes from "../src/transactions/transaction.routes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/gestionBancaria/api/v1", accountRoutes);
 app.use("/gestionBancaria/api/v1/users", userRoutes);
+app.use("/gestionBancaria/api/v1/transactions", transactionRoutes);
 
 app.use((req, res) => {
     res.status(404).json({
