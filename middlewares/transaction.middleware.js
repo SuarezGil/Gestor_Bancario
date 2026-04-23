@@ -18,7 +18,7 @@ export const validateTransaction = async (req, res, next) => {
             return res.status(400).json({ success: false, message: 'El monto debe ser mayor a 0' });
         }
 
-        const validCurrencies = ['GTQ', 'USD'];
+        const validCurrencies = ['GTQ', 'USD', 'EUR', 'MXN', 'COP', 'JPY'];
         if (!validCurrencies.includes(String(moneda).toUpperCase())) {
             return res.status(400).json({ success: false, message: 'moneda inválida' });
         }

@@ -29,7 +29,7 @@ export const validateCreateAccount = [
     // ========================
     body('moneda')
         .notEmpty().withMessage('La moneda es requerida')
-        .isIn(['GTQ', 'USD'])
+        .isIn(['GTQ', 'USD', 'EUR', 'MXN', 'COP', 'JPY'])
         .withMessage('Moneda no válida'),
 
     // ========================
