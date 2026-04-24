@@ -12,7 +12,7 @@ export const createAccount = async (req, res) => {
         const accountData = {
             ...req.body,
             estado: true,
-            userId: req.targetUserId // id del usuario dueño de la cuenta
+            userId: req.body.userId // id del usuario dueño de la cuenta
         };
 
         const account = new Account(accountData);
@@ -45,7 +45,7 @@ export const createAccount = async (req, res) => {
 export const getAccounts = async (req, res) => {
     try {
 
-        const { page = 1, limit = 10, estado = true } = req.query;
+        const { page = 1, limit = 10, estado = true, misCuentas } = req.query;
 
         const pageNumber = Math.max(parseInt(page, 10) || 1, 1);
         const limitNumber = Math.max(parseInt(limit, 10) || 10, 1);
@@ -54,17 +54,21 @@ export const getAccounts = async (req, res) => {
             ? estado.toLowerCase() === 'true'
             : estado;
 
-        // Filtro
+        // Filtro base
         const filter = {
-            estado: estadoValue,
-            userId: req.userId
+            estado: estadoValue
         };
+
+        // Si el usuario quiere ver solo sus cuentas
+        if (misCuentas === 'true') {
+            filter.userId = req.userId;
+        }
 
         // Opciones
         const options = {
             page: pageNumber,
             limit: limitNumber,
-            sort: { fechaCreacion: -1 }
+            sort: { createdAt: -1 } // Corregido a createdAt que genera mongoose por defecto
         };
 
         // Buscar cuentas
@@ -72,14 +76,24 @@ export const getAccounts = async (req, res) => {
             .select('-_id')
             .limit(options.limit)
             .skip((pageNumber - 1) * limitNumber)
-            .sort(options.sort);
+            .sort(options.sort)
+            .lean(); // Usar lean para retornar objetos planos
 
         // Total
         const total = await Account.countDocuments(filter);
 
+        // Sanitizar datos sensibles
+        const sanitizedAccounts = accounts.map(account => {
+            // Si el usuario autenticado no es el dueño de la cuenta, ocultamos el saldo
+            if (String(account.userId) !== String(req.userId)) {
+                delete account.saldo;
+            }
+            return account;
+        });
+
         res.status(200).json({
             success: true,
-            data: accounts,
+            data: sanitizedAccounts,
             pagination: {
                 currentPage: pageNumber,
                 totalPages: Math.ceil(total / limitNumber),

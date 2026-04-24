@@ -6,10 +6,10 @@ import { body } from 'express-validator';
 export const validateCreateAccount = [
     // numeroCuenta se genera automáticamente
     // ========================
-    // tipoCuenta
+    // userId
     // ========================
-    body('tokenUsuario')
-        .notEmpty().withMessage('El token del usuario es requerido'),
+    body('userId')
+        .notEmpty().withMessage('El ID del usuario es requerido'),
 
     body('tipoCuenta')
         .notEmpty().withMessage('El tipo de cuenta es requerido')

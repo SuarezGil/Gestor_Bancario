@@ -17,8 +17,8 @@ const getCurrentDayRange = () => {
 };
 
 const getUserAccountIds = async (userId) => {
-    const userAccounts = await Account.find({ userId }).select('_id');
-    return userAccounts.map((account) => account._id);
+    const userAccounts = await Account.find({ userId }).select('numeroCuenta');
+    return userAccounts.map((account) => account.numeroCuenta);
 };
 
 const getDailyTransferredAmountGTQByUser = async (userId) => {
@@ -117,8 +117,8 @@ export const createTransaction = async (req, res) => {
                 });
             }
 
-            originAccount = await Account.findById(cuentaOrigen);
-            destinationAccount = await Account.findById(cuentaDestino);
+            originAccount = await Account.findOne({ numeroCuenta: cuentaOrigen });
+            destinationAccount = await Account.findOne({ numeroCuenta: cuentaDestino });
 
             if (!originAccount || !destinationAccount) {
                 return res.status(404).json({
@@ -142,7 +142,7 @@ export const createTransaction = async (req, res) => {
         }
 
         if (normalizedType === 'DEPOSITO') {
-            destinationAccount = await Account.findById(cuentaDestino);
+            destinationAccount = await Account.findOne({ numeroCuenta: cuentaDestino });
 
             if (!destinationAccount) {
                 return res.status(404).json({
@@ -156,7 +156,7 @@ export const createTransaction = async (req, res) => {
         }
 
         if (normalizedType === 'RETIRO') {
-            originAccount = await Account.findById(cuentaOrigen);
+            originAccount = await Account.findOne({ numeroCuenta: cuentaOrigen });
 
             if (!originAccount) {
                 return res.status(404).json({
@@ -188,8 +188,8 @@ export const createTransaction = async (req, res) => {
             tipoTransaccion: normalizedType,
             monto: amount,
             moneda: originalCurrency,
-            cuentaOrigen: originAccount ? originAccount._id : null,
-            cuentaDestino: destinationAccount ? destinationAccount._id : null,
+            cuentaOrigen: originAccount ? originAccount.numeroCuenta : null,
+            cuentaDestino: destinationAccount ? destinationAccount.numeroCuenta : null,
             descripcion: descripcion || null
         });
 
@@ -198,8 +198,7 @@ export const createTransaction = async (req, res) => {
         const monedaOrigenResp = originAccount ? String(originAccount.moneda).toUpperCase() : String(moneda).toUpperCase();
         const monedaDestinoResp = destinationAccount ? String(destinationAccount.moneda).toUpperCase() : String(moneda).toUpperCase();
 
-        const transactionResponse = transaction.toObject();
-        delete transactionResponse._id;
+        const transactionResponse = transaction.toJSON();
 
         let applied;
         const isTransfer = normalizedType === 'TRANSFERENCIA';
@@ -286,9 +285,14 @@ export const getTransactions = async (req, res) => {
 
 export const getTransactionsById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const filter = await getUserTransactionFilter(req);
+        if (req.userRole !== 'ADMIN_ROLE') {
+            return res.status(403).json({
+                success: false,
+                message: 'Solo los administradores pueden buscar transacciones por ID'
+            });
+        }
 
+        const { id } = req.params;
         const transaction = await Transaction.findById(id);
 
         if (!transaction) {
@@ -298,17 +302,6 @@ export const getTransactionsById = async (req, res) => {
             });
         }
 
-        if (req.userRole !== 'ADMIN_ROLE') {
-            const visibleTransaction = await Transaction.findOne({ _id: id, ...filter });
-
-            if (!visibleTransaction) {
-                return res.status(403).json({
-                    success: false,
-                    message: 'No tienes permisos para ver esta transacción'
-                });
-            }
-        }
-
         res.status(200).json({
             success: true,
             data: transaction
@@ -316,7 +309,7 @@ export const getTransactionsById = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: `Error al obtener la transacción con id ${req.params.id}`,
+            message: `Error al obtener la transacción con id ${req.params?.id || 'desconocido'}`,
             error: error.message
         });
     }
@@ -369,7 +362,7 @@ export const updateTransaction = async (req, res) => {
                     });
                 }
 
-                const cuentaDestino = await Account.findById(transaction.cuentaDestino);
+                const cuentaDestino = await Account.findOne({ numeroCuenta: transaction.cuentaDestino });
 
                 if (!cuentaDestino) {
                     return res.status(404).json({
@@ -378,7 +371,7 @@ export const updateTransaction = async (req, res) => {
                     });
                 }
 
-                const montoConvertido = convert(
+                const montoConvertido = await convert(
                     Number(transaction.monto),
                     String(transaction.moneda).toUpperCase(),
                     String(cuentaDestino.moneda).toUpperCase()
@@ -408,7 +401,7 @@ export const updateTransaction = async (req, res) => {
                     });
                 }
 
-                const cuentaDestino = await Account.findById(transaction.cuentaDestino);
+                const cuentaDestino = await Account.findOne({ numeroCuenta: transaction.cuentaDestino });
 
                 if (!cuentaDestino) {
                     return res.status(404).json({
@@ -417,13 +410,13 @@ export const updateTransaction = async (req, res) => {
                     });
                 }
 
-                const montoAnteriorConvertido = convert(
+                const montoAnteriorConvertido = await convert(
                     Number(transaction.monto),
                     String(transaction.moneda).toUpperCase(),
                     String(cuentaDestino.moneda).toUpperCase()
                 );
 
-                const montoNuevoConvertido = convert(
+                const montoNuevoConvertido = await convert(
                     nuevoMonto,
                     String(transaction.moneda).toUpperCase(),
                     String(cuentaDestino.moneda).toUpperCase()

@@ -1,8 +1,8 @@
 'use strict';
 
-import mongoose from "mongoose";
+import { Schema, model } from 'mongoose';
 
-const accountSchema = mongoose.Schema(
+const accountSchema = new Schema(
     {
         userId: {
             type: String,
@@ -76,4 +76,4 @@ accountSchema.pre('validate', async function () {
     this.numeroCuenta = generated;
 });
 
-export default mongoose.model('Account', accountSchema);
+export default model('Account', accountSchema);

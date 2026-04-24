@@ -22,6 +22,7 @@ const MIMETYPES = [
     'image/jpg',
     'image/webp',
     'image/avif',
+    'image/jfif'
 ]
 
 const MAX_FILE_SIZE = 10*1024*1024; // QUE EN TOTAL SEAN 10MB
@@ -40,7 +41,7 @@ const createCloudinaryUploader = (folder) => {
             return {
                 folder: folder,
                 public_id: publicId,
-                allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'avif', ],
+                allowed_formats: ['jpeg', 'jpg', 'png', 'webp', 'avif', 'jfif'],
                 transformation: [{with: 1000, heigth: 1000, crop: 'limit' }],
                 resource_type: 'image'
             }
@@ -50,7 +51,10 @@ const createCloudinaryUploader = (folder) => {
     return multer ({
         storage: storage,
         fileFilter: (req, file, cb) =>{
-            if(MIMETYPES.includes(file.mimetype)){
+            const fileExtension = extname(file.originalname).toLowerCase();
+            const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.jfif'];
+
+            if(MIMETYPES.includes(file.mimetype) || allowedExtensions.includes(fileExtension)){
                 cb(null, true);
             }else {
                 cb(new Error(`Solo se permiten imagenes: ${MIMETYPES.join(',')}`))

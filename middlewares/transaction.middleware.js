@@ -27,10 +27,11 @@ export const validateTransaction = async (req, res, next) => {
             if (!cuentaOrigen) return res.status(400).json({ success: false, message: 'cuentaOrigen es obligatoria para transferencias' });
             if (!cuentaDestino) return res.status(400).json({ success: false, message: 'cuentaDestino es obligatoria para transferencias' });
 
-            const origin = await Account.findById(cuentaOrigen);
-            const destination = await Account.findById(cuentaDestino);
+            const origin = await Account.findOne({ numeroCuenta: cuentaOrigen });
+            const destination = await Account.findOne({ numeroCuenta: cuentaDestino });
 
-            if (!origin || !destination) return res.status(404).json({ success: false, message: 'Cuenta origen o destino no encontrada' });
+            if (!origin || !destination) return res.status(404).json({ success: false, message: 'Cuenta origen o destino no encontrada por número de cuenta' });
+
             // Validar que el usuario autenticado sea el dueño de la cuenta de origen
             if (String(origin.userId) !== String(req.userId)) {
                 return res.status(403).json({ success: false, message: 'No tienes permiso para operar con la cuenta de origen' });
@@ -38,15 +39,23 @@ export const validateTransaction = async (req, res, next) => {
             if (origin.saldo < monto) return res.status(400).json({ success: false, message: 'Saldo insuficiente en la cuenta origen' });
 
         } else if (normalizedType === 'DEPOSITO') {
+            if (req.userRole !== 'ADMIN_ROLE') {
+                return res.status(403).json({ success: false, message: 'Solo los administradores pueden realizar depósitos' });
+            }
+
             if (!cuentaDestino) return res.status(400).json({ success: false, message: 'cuentaDestino es obligatoria para depósitos' });
-            const destination = await Account.findById(cuentaDestino);
-            if (!destination) return res.status(404).json({ success: false, message: 'Cuenta destinataria no encontrada' });
+            
+            const destination = await Account.findOne({ numeroCuenta: cuentaDestino });
+            
+            if (!destination) return res.status(404).json({ success: false, message: 'Cuenta destinataria no encontrada por número de cuenta' });
+
         } else if (normalizedType === 'RETIRO') {
             if (!cuentaOrigen) return res.status(400).json({ success: false, message: 'cuentaOrigen es obligatoria para retiros' });
 
-            const origin = await Account.findById(cuentaOrigen);
+            const origin = await Account.findOne({ numeroCuenta: cuentaOrigen });
 
-            if (!origin) return res.status(404).json({ success: false, message: 'Cuenta origen no encontrada' });
+            if (!origin) return res.status(404).json({ success: false, message: 'Cuenta origen no encontrada por número de cuenta' });
+
             // Validar que el usuario autenticado sea el dueño de la cuenta de origen
             if (String(origin.userId) !== String(req.userId)) {
                 return res.status(403).json({ success: false, message: 'No tienes permiso para operar con la cuenta de origen' });

@@ -91,8 +91,8 @@ export const currencyConversionMiddleware = async (req, res, next) => {
     req.body.montoDestino = Number(requestAmount.toFixed(2));
 
     if (type === 'TRANSFERENCIA') {
-      const origin = await Account.findById(cuentaOrigen);
-      const destination = await Account.findById(cuentaDestino);
+      const origin = await Account.findOne({ numeroCuenta: cuentaOrigen });
+      const destination = await Account.findOne({ numeroCuenta: cuentaDestino });
       if (!origin || !destination) return next();
 
       const originCurrency = String(origin.moneda).toUpperCase();
@@ -116,7 +116,7 @@ export const currencyConversionMiddleware = async (req, res, next) => {
     }
 
     if (type === 'DEPOSITO') {
-      const destination = await Account.findById(cuentaDestino);
+      const destination = await Account.findOne({ numeroCuenta: cuentaDestino });
       if (!destination) return next();
 
       const destinationCurrency = String(destination.moneda).toUpperCase();
@@ -134,7 +134,7 @@ export const currencyConversionMiddleware = async (req, res, next) => {
     }
 
     if (type === 'RETIRO') {
-      const origin = await Account.findById(cuentaOrigen);
+      const origin = await Account.findOne({ numeroCuenta: cuentaOrigen });
       if (!origin) return next();
 
       const originCurrency = String(origin.moneda).toUpperCase();

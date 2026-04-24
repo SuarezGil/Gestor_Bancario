@@ -1,8 +1,8 @@
 "use strict";
  
-import mongoose from "mongoose";
+import { Schema, model } from 'mongoose';
  
-const transactionSchema = mongoose.Schema(
+const transactionSchema = new Schema(
     {
         tipoTransaccion: {
             type: String,
@@ -13,13 +13,11 @@ const transactionSchema = mongoose.Schema(
             }
         },
         cuentaOrigen: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Account",
+            type: String,
             default: null
         },
         cuentaDestino: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Account",
+            type: String,
             default: null
         },
         monto: {
@@ -52,7 +50,15 @@ const transactionSchema = mongoose.Schema(
     },
     {
         timestamps: true,
-        versionKey: false
+        versionKey: false,
+        toJSON: {
+            virtuals: true,
+            transform: function(doc, ret) {
+                ret.id = ret._id;
+                delete ret._id;
+                return ret;
+            }
+        }
     }
 );
  
@@ -65,4 +71,4 @@ transactionSchema.index({ estado: 1 });
 transactionSchema.index({ cuentaOrigen: 1, fechaTransaccion: -1 });
 transactionSchema.index({ cuentaDestino: 1, fechaTransaccion: -1 });
  
-export default mongoose.model("Transaction", transactionSchema);
+export default model("Transaction", transactionSchema);

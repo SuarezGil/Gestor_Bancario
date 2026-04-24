@@ -3,13 +3,13 @@ import Favorite from './favorite.model.js';
 export const addFavorite = async (req, res) => {
   try {
     const { cuenta, tipo, alias } = req.body;
-    const usuario = req.userId;
+    const userId = req.userId;
 
-    if (!usuario) {
-      return res.status(400).json({ success: false, message: 'usuario es requerido' });
+    if (!userId) {
+      return res.status(400).json({ success: false, message: 'El ID del usuario es requerido' });
     }
 
-    const existingFavorite = await Favorite.findOne({ usuario, cuenta });
+    const existingFavorite = await Favorite.findOne({ userId, cuenta });
     if (existingFavorite) {
       return res.status(409).json({
         success: false,
@@ -17,7 +17,7 @@ export const addFavorite = async (req, res) => {
       });
     }
 
-    const fav = await Favorite.create({ usuario, cuenta, tipo, alias });
+    const fav = await Favorite.create({ userId, cuenta, tipo, alias });
     return res.status(201).json({ success: true, favorite: fav });
   } catch (err) {
     if (err?.code === 11000) {
@@ -33,13 +33,13 @@ export const addFavorite = async (req, res) => {
 
 export const listFavorites = async (req, res) => {
   try {
-    const usuario = req.userId;
+    const userId = req.userId;
 
-    if (!usuario) {
-      return res.status(400).json({ success: false, message: 'usuario es requerido' });
+    if (!userId) {
+      return res.status(400).json({ success: false, message: 'El ID del usuario es requerido' });
     }
 
-    const favs = await Favorite.find({ usuario });
+    const favs = await Favorite.find({ userId });
     return res.json({ success: true, favorites: favs });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
@@ -48,14 +48,14 @@ export const listFavorites = async (req, res) => {
 
 export const deleteFavorite = async (req, res) => {
   try {
-    const usuario = req.userId;
+    const userId = req.userId;
     const { id } = req.params;
 
-    if (!usuario) {
-      return res.status(400).json({ success: false, message: 'usuario es requerido' });
+    if (!userId) {
+      return res.status(400).json({ success: false, message: 'El ID del usuario es requerido' });
     }
 
-    await Favorite.deleteOne({ _id: id, usuario });
+    await Favorite.deleteOne({ _id: id, userId });
     return res.json({ success: true });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
@@ -64,15 +64,15 @@ export const deleteFavorite = async (req, res) => {
 
 export const transferFromFavorite = async (req, res) => {
   try {
-    const usuario = req.userId;
+    const userId = req.userId;
     const { id } = req.params;
     const { monto, moneda, descripcion } = req.body;
 
-    if (!usuario) {
-      return res.status(400).json({ success: false, message: 'usuario es requerido' });
+    if (!userId) {
+      return res.status(400).json({ success: false, message: 'El ID del usuario es requerido' });
     }
 
-    const fav = await Favorite.findOne({ _id: id, usuario });
+    const fav = await Favorite.findOne({ _id: id, userId });
     if (!fav) {
       return res.status(404).json({ success: false, message: 'Favorito no encontrado' });
     }

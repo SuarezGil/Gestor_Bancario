@@ -1,23 +1,24 @@
-import mongoose from 'mongoose';
+'use strict';
 
-const FavoriteSchema = new mongoose.Schema(
+import { Schema, model } from 'mongoose';
+
+const favoriteSchema = new Schema(
   {
-    usuario: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+    userId: {
+      type: String,
+      required: [true, 'El ID del usuario es requerido']
     },
     cuenta: {
       type: String,
-      required: true
+      required: [true, 'El número de cuenta es requerido']
     },
     tipo: {
       type: String,
-      required: true
+      required: [true, 'El tipo de cuenta es requerido']
     },
     alias: {
       type: String,
-      required: true
+      required: [true, 'El alias de la cuenta es requerido']
     }
   },
   {
@@ -27,6 +28,6 @@ const FavoriteSchema = new mongoose.Schema(
 );
 
 // Evita duplicados: un usuario no puede agregar la misma cuenta dos veces.
-FavoriteSchema.index({ usuario: 1, cuenta: 1 }, { unique: true });
+favoriteSchema.index({ userId: 1, cuenta: 1 }, { unique: true });
 
-export default mongoose.model('Favorite', FavoriteSchema);
+export default model('Favorite', favoriteSchema);

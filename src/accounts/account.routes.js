@@ -11,7 +11,6 @@ import {
 
 import { validateCreateAccount } from '../../middlewares/validateCreateAccount.js';
 import { validateJWT, isAdmin } from '../../middlewares/validate-JWT.js';
-import { validateUserFromBody } from '../../middlewares/validate-UserJWT.js';
 import parseFormData from '../../middlewares/parseFormData.js';
 
 
@@ -20,7 +19,6 @@ router.post(
     validateJWT,
     parseFormData,
     isAdmin,
-    validateUserFromBody,
     validateCreateAccount,
     createAccount
 );
