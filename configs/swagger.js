@@ -3,224 +3,220 @@ import swaggerJSDoc from "swagger-jsdoc";
 const swaggerDefinition = {
     openapi: "3.0.3",
     info: {
-        title: "Gestor Bancario API",
+        title: "Gestor Bancario API Completa",
         version: "1.0.0",
-        description: "Documentación de la API para gestión de cuentas y transacciones bancarias."
+        description: "Documentación de la API principal para gestión de cuentas, transacciones y favoritos."
     },
     servers: [
         {
-            url: "http://localhost:3000/gestionBancaria/api/v1",
-            description: "Servidor local"
-        },
-        {
-            url: "http://localhost:3001/api/v1",
-            description: "AuthService local"
+            url: "http://localhost:3006/gestionBancaria/api/v1",
+            description: "Servidor Gestor Bancario local"
         }
     ],
     tags: [
         {
-            name: "Authentication",
-            description: "Endpoints del servicio de autenticación"
+            name: "Accounts",
+            description: "Gestión de cuentas bancarias"
         },
         {
-            name: "Profile",
-            description: "Endpoints de perfil de usuario"
+            name: "Transactions",
+            description: "Operaciones de depósitos, retiros y transferencias"
+        },
+        {
+            name: "Favorites",
+            description: "Cuentas favoritas de los usuarios"
         }
     ],
     paths: {
-        "/auth/register": {
+        "/account/create": {
             post: {
-                tags: ["Authentication"],
-                summary: "Registra un nuevo usuario",
+                tags: ["Accounts"],
+                summary: "Crea una nueva cuenta bancaria (Requiere Rol Admin)",
+                security: [{ bearerAuth: [] }],
                 requestBody: {
                     required: true,
                     content: {
                         "multipart/form-data": {
                             schema: {
-                                $ref: "#/components/schemas/AuthRegisterRequest"
+                                $ref: "#/components/schemas/AccountCreateRequest"
                             }
-                        }
-                    }
-                },
-                responses: {
-                    "201": {
-                        description: "Usuario registrado exitosamente"
-                    },
-                    "400": {
-                        description: "Errores de validación"
-                    },
-                    "409": {
-                        description: "Email ya existe"
-                    }
-                }
-            }
-        },
-        "/auth/login": {
-            post: {
-                tags: ["Authentication"],
-                summary: "Autentica un usuario",
-                requestBody: {
-                    required: true,
-                    content: {
+                        },
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/AuthLoginRequest"
+                                $ref: "#/components/schemas/AccountCreateRequest"
                             }
                         }
                     }
                 },
                 responses: {
-                    "200": {
-                        description: "Login exitoso"
-                    },
-                    "401": {
-                        description: "Credenciales inválidas"
-                    },
-                    "423": {
-                        description: "Cuenta bloqueada"
-                    }
+                    "201": { description: "Cuenta creada exitosamente" },
+                    "400": { description: "Datos inválidos" },
+                    "403": { description: "No autorizado (Requiere Admin)" }
                 }
             }
         },
-        "/auth/verify-email": {
-            post: {
-                tags: ["Authentication"],
-                summary: "Verifica el email del usuario",
-                requestBody: {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/AuthTokenRequest"
-                            }
-                        }
-                    }
-                },
-                responses: {
-                    "200": {
-                        description: "Email verificado exitosamente"
-                    },
-                    "400": {
-                        description: "Token inválido o expirado"
-                    }
-                }
-            }
-        },
-        "/auth/resend-verification": {
-            post: {
-                tags: ["Authentication"],
-                summary: "Reenvía el email de verificación",
-                requestBody: {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/AuthEmailRequest"
-                            }
-                        }
-                    }
-                },
-                responses: {
-                    "200": {
-                        description: "Email reenviado exitosamente"
-                    },
-                    "404": {
-                        description: "Usuario no encontrado"
-                    }
-                }
-            }
-        },
-        "/auth/forgot-password": {
-            post: {
-                tags: ["Authentication"],
-                summary: "Inicia recuperación de contraseña",
-                requestBody: {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/AuthEmailRequest"
-                            }
-                        }
-                    }
-                },
-                responses: {
-                    "200": {
-                        description: "Instrucciones enviadas al email"
-                    }
-                }
-            }
-        },
-        "/auth/reset-password": {
-            post: {
-                tags: ["Authentication"],
-                summary: "Resetea la contraseña",
-                requestBody: {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/AuthResetPasswordRequest"
-                            }
-                        }
-                    }
-                },
-                responses: {
-                    "200": {
-                        description: "Contraseña actualizada exitosamente"
-                    },
-                    "400": {
-                        description: "Token inválido o expirado"
-                    }
-                }
-            }
-        },
-        "/auth/profile": {
+        "/account/get": {
             get: {
-                tags: ["Profile"],
-                summary: "Obtiene el perfil del usuario autenticado",
-                security: [
-                    {
-                        bearerAuth: []
-                    }
+                tags: ["Accounts"],
+                summary: "Obtiene una lista de cuentas (Paginada)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "page", in: "query", schema: { type: "integer", default: 1 } },
+                    { name: "limit", in: "query", schema: { type: "integer", default: 10 } },
+                    { name: "misCuentas", in: "query", description: "Si es true, solo devuelve las cuentas del usuario logueado", schema: { type: "boolean" } }
                 ],
                 responses: {
-                    "200": {
-                        description: "Perfil obtenido exitosamente"
-                    },
-                    "401": {
-                        description: "Token inválido"
-                    },
-                    "403": {
-                        description: "Email no verificado"
-                    }
+                    "200": { description: "Lista de cuentas obtenida exitosamente" }
                 }
             }
         },
-        "/auth/profile/by-id": {
+        "/transactions/create": {
             post: {
-                tags: ["Profile"],
-                summary: "Obtiene el perfil de un usuario por ID",
+                tags: ["Transactions"],
+                summary: "Realiza una nueva transacción",
+                security: [{ bearerAuth: [] }],
                 requestBody: {
                     required: true,
                     content: {
+                        "multipart/form-data": {
+                            schema: {
+                                $ref: "#/components/schemas/TransactionCreateRequest"
+                            }
+                        },
                         "application/json": {
                             schema: {
-                                $ref: "#/components/schemas/AuthProfileByIdRequest"
+                                $ref: "#/components/schemas/TransactionCreateRequest"
                             }
                         }
                     }
                 },
                 responses: {
-                    "200": {
-                        description: "Perfil obtenido exitosamente"
-                    },
-                    "400": {
-                        description: "userId no proporcionado"
-                    },
-                    "404": {
-                        description: "Usuario no encontrado"
+                    "201": { description: "Transacción creada exitosamente" },
+                    "400": { description: "Fondos insuficientes o límite excedido" },
+                    "403": { description: "No autorizado o intento de depósito sin ser Admin" },
+                    "404": { description: "Cuenta origen o destino no encontrada" }
+                }
+            }
+        },
+        "/transactions/get": {
+            get: {
+                tags: ["Transactions"],
+                summary: "Listar transacciones del usuario",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "page", in: "query", schema: { type: "integer", default: 1 } },
+                    { name: "limit", in: "query", schema: { type: "integer", default: 10 } }
+                ],
+                responses: {
+                    "200": { description: "Transacciones obtenidas" }
+                }
+            }
+        },
+        "/transactions/get/{id}": {
+            get: {
+                tags: ["Transactions"],
+                summary: "Buscar transacción por ID (Requiere Rol Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "id", in: "path", required: true, schema: { type: "string" } }
+                ],
+                responses: {
+                    "200": { description: "Transacción obtenida" },
+                    "403": { description: "No autorizado" },
+                    "404": { description: "No encontrada" }
+                }
+            }
+        },
+        "/transactions/update/{id}": {
+            put: {
+                tags: ["Transactions"],
+                summary: "Actualizar o Cancelar Transacción (Requiere Rol Admin)",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "id", in: "path", required: true, schema: { type: "string" } }
+                ],
+                requestBody: {
+                    content: {
+                        "multipart/form-data": {
+                            schema: {
+                                $ref: "#/components/schemas/TransactionUpdateRequest"
+                            }
+                        },
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/TransactionUpdateRequest"
+                            }
+                        }
                     }
+                },
+                responses: {
+                    "200": { description: "Actualizada o cancelada correctamente" },
+                    "400": { description: "Fuera de límite de tiempo para cancelar (1 minuto)" }
+                }
+            }
+        },
+        "/favorites": {
+            post: {
+                tags: ["Favorites"],
+                summary: "Agregar una cuenta a favoritos",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/FavoriteCreateRequest"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "201": { description: "Favorito agregado" },
+                    "409": { description: "Ya existe en favoritos" }
+                }
+            },
+            get: {
+                tags: ["Favorites"],
+                summary: "Obtener lista de favoritos del usuario",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": { description: "Lista obtenida" }
+                }
+            }
+        },
+        "/favorites/{id}": {
+            delete: {
+                tags: ["Favorites"],
+                summary: "Eliminar una cuenta de favoritos",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "id", in: "path", required: true, schema: { type: "string" } }
+                ],
+                responses: {
+                    "200": { description: "Eliminado correctamente" }
+                }
+            }
+        },
+        "/favorites/{id}/transfer": {
+            post: {
+                tags: ["Favorites"],
+                summary: "Preparar transferencia rápida a un favorito",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    { name: "id", in: "path", required: true, schema: { type: "string" } }
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                $ref: "#/components/schemas/FavoriteTransferRequest"
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    "200": { description: "Transferencia rápida preparada" }
                 }
             }
         }
@@ -236,8 +232,12 @@ const swaggerDefinition = {
         schemas: {
             AccountCreateRequest: {
                 type: "object",
-                required: ["tipoCuenta", "saldo", "moneda"],
+                required: ["userId", "tipoCuenta", "saldo", "moneda"],
                 properties: {
+                    userId: {
+                        type: "string",
+                        example: "ID_DEL_USUARIO"
+                    },
                     tipoCuenta: {
                         type: "string",
                         example: "AHORRO",
@@ -250,11 +250,7 @@ const swaggerDefinition = {
                     moneda: {
                         type: "string",
                         example: "GTQ",
-                        enum: ["GTQ", "USD"]
-                    },
-                    estado: {
-                        type: "boolean",
-                        example: true
+                        enum: ["GTQ", "USD", "EUR"]
                     }
                 }
             },
@@ -274,15 +270,17 @@ const swaggerDefinition = {
                     moneda: {
                         type: "string",
                         example: "GTQ",
-                        enum: ["GTQ", "USD"]
+                        enum: ["GTQ", "USD", "EUR", "MXN", "COP", "JPY"]
                     },
                     cuentaOrigen: {
                         type: "string",
-                        example: "67b8d2f3d0a1a23c8b91a001"
+                        example: "8493012934",
+                        description: "Número de cuenta de origen (10 dígitos)"
                     },
                     cuentaDestino: {
                         type: "string",
-                        example: "67b8d2f3d0a1a23c8b91a002"
+                        example: "1234567890",
+                        description: "Número de cuenta de destino (10 dígitos)"
                     },
                     descripcion: {
                         type: "string",
@@ -290,92 +288,58 @@ const swaggerDefinition = {
                     }
                 }
             },
-            AuthRegisterRequest: {
+            TransactionUpdateRequest: {
                 type: "object",
-                required: ["name", "email", "password", "phone"],
                 properties: {
-                    name: {
+                    estado: {
+                        type: "string",
+                        example: "CANCELADA",
+                        enum: ["CANCELADA", "COMPLETADA"]
+                    },
+                    descripcion: {
+                        type: "string",
+                        example: "Cancelado por error"
+                    },
+                    monto: {
+                        type: "number",
+                        example: 300,
+                        description: "Solo aplicable para modificar depósitos"
+                    }
+                }
+            },
+            FavoriteCreateRequest: {
+                type: "object",
+                required: ["cuenta", "tipo", "alias"],
+                properties: {
+                    cuenta: {
+                        type: "string",
+                        example: "1234567890"
+                    },
+                    tipo: {
+                        type: "string",
+                        example: "AHORRO"
+                    },
+                    alias: {
                         type: "string",
                         example: "Juan Perez"
-                    },
-                    email: {
-                        type: "string",
-                        format: "email",
-                        example: "juan@email.com"
-                    },
-                    password: {
-                        type: "string",
-                        minLength: 8,
-                        example: "S3gura123!"
-                    },
-                    phone: {
-                        type: "string",
-                        example: "12345678"
-                    },
-                    profilePicture: {
-                        type: "string",
-                        format: "binary"
                     }
                 }
             },
-            AuthLoginRequest: {
+            FavoriteTransferRequest: {
                 type: "object",
-                required: ["email", "password"],
+                required: ["monto", "moneda"],
                 properties: {
-                    email: {
-                        type: "string",
-                        format: "email",
-                        example: "juan@email.com"
+                    monto: {
+                        type: "number",
+                        example: 500
                     },
-                    password: {
+                    moneda: {
                         type: "string",
-                        example: "S3gura123!"
-                    }
-                }
-            },
-            AuthTokenRequest: {
-                type: "object",
-                required: ["token"],
-                properties: {
-                    token: {
-                        type: "string",
-                        example: "token_verificacion"
-                    }
-                }
-            },
-            AuthEmailRequest: {
-                type: "object",
-                required: ["email"],
-                properties: {
-                    email: {
-                        type: "string",
-                        format: "email",
-                        example: "juan@email.com"
-                    }
-                }
-            },
-            AuthResetPasswordRequest: {
-                type: "object",
-                required: ["token", "newPassword"],
-                properties: {
-                    token: {
-                        type: "string",
-                        example: "token_reset"
+                        example: "GTQ"
                     },
-                    newPassword: {
+                    descripcion: {
                         type: "string",
-                        minLength: 8,
-                        example: "NuevaClave123!"
-                    }
-                }
-            },
-            AuthProfileByIdRequest: {
-                type: "object",
-                required: ["userId"],
-                properties: {
-                    userId: {
-                        type: "string",
-                        example: "d2b3f4a5-1234-4d5e-8f90-123456789abc"
+                        example: "Pago de cena"
                     }
                 }
             }
