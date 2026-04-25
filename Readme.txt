@@ -1,13 +1,52 @@
+# Server
 NODE_ENV=development
-PORT=3006
+PORT=3005
  
-URI_MONGO=mongodb://localhost:27017/gestorBancarioDb
+# Database PostgreSQL
+DB_HOST=localhost
+DB_PORT=5435
+DB_NAME=gestorBancarioDb
+DB_USERNAME=postgres
+DB_PASSWORD=root
+DB_SQL_LOGGING=false
  
+# JWT Configuration
 JWT_SECRET=MyVerySecretKeyForJWTTokenAuthenticationWith256Bits!
+JWT_EXPIRES_IN=30m
+JWT_REFRESH_EXPIRES_IN=7d
 JWT_ISSUER=rVmGkAiSlMaR
 JWT_AUDIENCE=rVmGkAiSlMaR
  
+# SMTP Configuration
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_ENABLE_SSL=true
+SMTP_USERNAME=angelgeovannyvinasco@gmail.com
+SMTP_PASSWORD=cvni eisi nwwd lqyt
+EMAIL_FROM=angelgeovannyvinasco@gmail.com
+EMAIL_FROM_NAME=AuthDotnet App
+ 
+# Cloudinary (upload de perfiles)
 CLOUDINARY_CLOUD_NAME=dxwodvknq
 CLOUDINARY_API_KEY=315137646775675
 CLOUDINARY_API_SECRET=5_UHfg54EkMdNq8z030tYdrJtVY
-CLOUDINARY_FOLDER=gestorBancario/fields
+CLOUDINARY_BASE_URL=https://res.cloudinary.com/dxwodvknq/image/upload/
+CLOUDINARY_FOLDER=gestorBancario/image
+CLOUDINARY_DEFAULT_AVATAR_FILENAME=default-avatar_ewzxwx.png
+ 
+# File Upload
+UPLOAD_PATH=./uploads
+ 
+# Frontend URL
+FRONTEND_URL=http://localhost:5173
+
+# Backend URL (para links de verificacion)
+BACKEND_URL=http://localhost:3005
+ 
+# Security
+ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+ADMIN_ALLOWED_ORIGINS=http://localhost:5173
+ 
+# Verification Tokens (en horas)
+VERIFICATION_EMAIL_EXPIRY_HOURS=24
+PASSWORD_RESET_EXPIRY_HOURS=1
